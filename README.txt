@@ -1,19 +1,10 @@
-Low Level Virtual Machine (LLVM)
+Data Only Attack Migitation
 ================================
 
-This directory and its subdirectories contain source code for LLVM,
-a toolkit for the construction of highly optimized compilers,
-optimizers, and runtime environments.
+To generate the hardened binary, use the ./run.sh located at test/Datarand/run.sh
 
-LLVM is open source software. You may freely distribute it under the terms of
-the license agreement found in LICENSE.txt.
+The input to the script is the name of the combined bitcode for the application (without the .bc) 
 
-Please see the documentation provided in docs/ for further
-assistance with LLVM, and in particular docs/GettingStarted.rst for getting
-started with LLVM and docs/README.txt for an overview of LLVM's
-documentation setup.
+e.g. ./run.sh test
 
-If you are writing a package for LLVM, see docs/Packaging.rst for our
-suggestions.
-
-
+To generate the hardened binary for the the bitcode test.bc
