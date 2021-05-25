@@ -1,4 +1,4 @@
-# Sensitive Data Encryption
+### Sensitive Data Encryption
 ================================
 
 1. We need [binutils](https://www.gnu.org/software/binutils/) in order to do LTO for Whole Program Analysis. The instructions to set it up correctly is [here](https://llvm.org/docs/GoldPlugin.html).
@@ -20,7 +20,7 @@
    `./run.sh test`
    
    
-## Other applications
+#### Other applications
 
 The steps for running this for multi-file applications, is application-specific. These are the general steps that must be done.
 
