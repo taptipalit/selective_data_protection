@@ -1,4 +1,4 @@
-# Data Leakage Attack Migitation
+# Sensitive Data Encryption
 ================================
 
 1. We need [binutils](https://www.gnu.org/software/binutils/) in order to do LTO for Whole Program Analysis. The instructions to set it up correctly is [here](https://llvm.org/docs/GoldPlugin.html).
