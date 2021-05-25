@@ -6,8 +6,9 @@ fileinst=$file"_inst"
 
 set -x
 
-LLVMSRC=/morespace/data-only-attack-mitigation
-LLVMROOT=/morespace/data-only-attack-mitigation/build/bin
+export LLVMSRC=/morespace/data-only-attack-mitigation
+export LLVMROOT=/morespace/data-only-attack-mitigation/build/bin
+export glibc_install=/mnt/Projects/tpalit/glibc/glibc-install
 
 rm null_helper.c aes_inreg.s aes_inmemkey.s aes_helper.c internal_libc.c
 #LLVMROOT=/mnt/donotuse_comparisonONLY/DataRandomization/install/bin
@@ -59,14 +60,13 @@ then
     exit 1
 fi
 
-$LLVMROOT/clang -static $GGDB aes_inreg.s aes_helper.c $fileinst.o -o $file
+$LLVMROOT/clang -c -O0  -DLLI -fPIC -fPIE $SANITIZE $GGDB aes_helper.c -o aes_h.o
+$LLVMROOT/clang -c -O0 $GGDB -fPIC -fPIE aes_inreg.s -o aes.o
+
+./run_glibc.sh $fileinst.o $file
 if [ $? -ne 0 ]
 then
     exit 1
 fi
 
 
-if [ $? -ne 0 ]
-then
-    exit 1
-fi
