@@ -62,6 +62,8 @@ class LibcTransformPass : public llvm::ModulePass {
         initializeLibcTransformPassPass(*llvm::PassRegistry::getPassRegistry());
     }
 
+    void recordGVars(llvm::Module&);
+    llvm::Instruction* getInsertionPoint(llvm::Module&);
     bool runOnModule(llvm::Module&) override;
 
 };

@@ -136,7 +136,7 @@ bool WPAPass::runOnModule(llvm::Module& module) {
             runPointerAnalysis(svfModule, i);
     }*/
 	//cout << "WPA\n";
-    module.dump();
+    //module.dump();
     for (StructType* stType: module.getIdentifiedStructTypes()) {
         errs() << "Num elements: " << stType->getNumElements() << " for " << stType->getName() << " is literal?" << stType->isLiteral() << "\n";
     }

@@ -6,25 +6,26 @@ fileinst=$file"_inst"
 
 set -x
 
-LLVMROOT=/mnt/Projects/LLVM-custom/install/bin
+LLVMSRC=/morespace/data-only-attack-mitigation
+LLVMROOT=/morespace/data-only-attack-mitigation/build/bin
 
 rm null_helper.c aes_inreg.s aes_inmemkey.s aes_helper.c internal_libc.c
 #LLVMROOT=/mnt/donotuse_comparisonONLY/DataRandomization/install/bin
 
-ln -s /mnt/Projects/LLVM-custom/lib/Transforms/Encryption/null_helper.c_ null_helper.c
-ln -s /mnt/Projects/LLVM-custom/lib/Transforms/Encryption/aes_inmemkey.s aes_inmemkey.s
-ln -s /mnt/Projects/LLVM-custom/lib/Transforms/Encryption/aes_inreg.s aes_inreg.s
-ln -s /mnt/Projects/LLVM-custom/lib/Transforms/Encryption/aes_helper.c_ aes_helper.c
-ln -s /mnt/Projects/LLVM-custom/lib/Transforms/LibcTransform/internal_libc.c_ internal_libc.c
+ln -s $LLVMSRC/lib/Transforms/Encryption/null_helper.c_ null_helper.c
+ln -s $LLVMSRC/lib/Transforms/Encryption/aes_inmemkey.s aes_inmemkey.s
+ln -s $LLVMSRC/lib/Transforms/Encryption/aes_inreg.s aes_inreg.s
+ln -s $LLVMSRC/lib/Transforms/Encryption/aes_helper.c_ aes_helper.c
+ln -s $LLVMSRC/lib/Transforms/LibcTransform/internal_libc.c_ internal_libc.c
 
 GGDB=-ggdb 
-musl-clang -O0 -c $GGDB  -emit-llvm $file.c -o $file.bc
+$LLVMROOT/clang -O0 -c $GGDB  -emit-llvm $file.c -o $file.bc
 if [ $? -ne 0 ]
 then
     exit 1
 fi
 
-musl-clang -c $GGDB -emit-llvm internal_libc.c -o internal_libc.bc
+$LLVMROOT/clang -c $GGDB -emit-llvm internal_libc.c -o internal_libc.bc
 if [ $? -ne 0 ]
 then
     exit 1
@@ -41,7 +42,7 @@ fi
 #wpa -ander -keep-self-cycle=all -dump-consG -dump-pag -print-all-pts $file.bc
 
 #$LLVMROOT/opt -wpa -print-all-pts -dump-pag -dump-consG $file.ll  -o $fileinst.bc 
-$LLVMROOT/opt -encryption -print-all-pts -dump-pag -debug-only=encryption -dump-consG $file.bc -o $fileinst.bc 
+$LLVMROOT/opt -encryption  $file.bc -o $fileinst.bc 
 # -fullanders -dump-pag -print-all-pts -dump-callgraph -dump-consG 
 #$LLVMROOT/opt -test-transform $file.bc  -o $fileinst.bc
 $LLVMROOT/llvm-dis $file.bc -o $file.ll
@@ -58,7 +59,7 @@ then
     exit 1
 fi
 
-musl-clang -static $GGDB aes_inreg.s aes_helper.c $fileinst.o -o $file
+$LLVMROOT/clang -static $GGDB aes_inreg.s aes_helper.c $fileinst.o -o $file
 if [ $? -ne 0 ]
 then
     exit 1

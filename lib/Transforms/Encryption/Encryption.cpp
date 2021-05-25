@@ -852,7 +852,6 @@ void EncryptionPass::removeAnnotateInstruction(Module& M) {
 		if (I->getName() == "llvm.global.annotations") {
 			for(Value::user_iterator User = I->user_begin(); User != I->user_end(); ++User) {
 
-				User->dump();
 			}
 
 			tobeDeleted = &(*I);
@@ -1253,7 +1252,6 @@ void EncryptionPass::collectSensitiveGEPInstructions(Module& M, std::map<PAGNode
 	LLVM_DEBUG(
 	for (Value* GEPInst: SensitiveGEPPtrList) {
 		dbgs() << "Sensitive GEP instruction: ";
-		GEPInst->dump();
 	}
 	);
 
@@ -1303,7 +1301,6 @@ void EncryptionPass::collectSensitiveAsmInstructions(Module& M, std::map<PAGNode
 	}
     dbgs() << "Sensitive Inline ASM:\n";
     for (Value* asmVal: SensitiveInlineAsmCalls) {
-        asmVal->dump();
     }
 }
 void EncryptionPass::collectSensitiveGEPInstructionsFromLoad(Module& M, std::map<PAGNode*, std::set<PAGNode*>>& ptsToMap) {
@@ -1338,7 +1335,6 @@ void EncryptionPass::collectSensitiveLoadInstructions(Module& M, std::map<PAGNod
 	LLVM_DEBUG (
 	for (Value* LdInst: SensitiveLoadPtrList) {
 		dbgs() << "Sensitive Load Ptr instruction: ";
-		LdInst->dump();
 	}
 	);
 
@@ -1412,7 +1408,6 @@ void EncryptionPass::collectSensitiveLoadInstructions(Module& M, std::map<PAGNod
 	LLVM_DEBUG (
 	for (Value* LdInst: SensitiveLoadList) {
 		dbgs() << "Sensitive Load instruction: ";
-		LdInst->dump();
 	}
 	);
 
@@ -1534,7 +1529,6 @@ void EncryptionPass::collectSensitiveExternalLibraryCalls(Module& M,  std::map<P
                                                     
 													LLVM_DEBUG (
 															dbgs() << "Sensitive external library call found: ";
-															value->dump();
 													      );
 													isSensitiveCall = true;
 												}
@@ -1562,7 +1556,6 @@ void EncryptionPass::collectSensitiveExternalLibraryCalls(Module& M,  std::map<P
                                                         if (isSensitiveArg(value, ptsToMap)) {
                                                             LLVM_DEBUG (
                                                                     dbgs() << "Sensitive external library call found: ";
-                                                                    value->dump();
                                                                   );
                                                             isSensitiveCall = true;
                                                         }
@@ -1734,7 +1727,6 @@ void EncryptionPass::performAesCacheInstrumentation(Module& M, std::map<PAGNode*
 			StoreInst* StInst = dyn_cast<StoreInst>(Repl->OldInstruction);
 			LLVM_DEBUG (
 			dbgs() << "Replacing Store Instruction : ";
-			StInst->dump();
 			);
 
             encryptionCount++;
@@ -1885,7 +1877,6 @@ void EncryptionPass::performXorInstrumentation(Module& M) {
 			StoreInst* StInst = dyn_cast<StoreInst>(Repl->OldInstruction);
 			LLVM_DEBUG (
 			dbgs() << "Replacing Store Instruction : ";
-			StInst->dump();
 			);
 			// Get the value operand
 			Value* PointerValue = StInst->getValueOperand();
@@ -2208,7 +2199,6 @@ void EncryptionPass::instrumentExternalFunctionCall(Module &M, std::map<PAGNode*
 				if (isSensitiveArg(value, ptsToMap)) {
 					LLVM_DEBUG (
 					dbgs() << "Do decryption for print value: ";
-					value->dump();
 					);
 					Function* decryptFunction = M.getFunction("decryptStringBeforeLibCall");
 					std::vector<Value*> ArgList;
@@ -2238,7 +2228,6 @@ void EncryptionPass::instrumentExternalFunctionCall(Module &M, std::map<PAGNode*
                 if (isSensitiveArg(value, ptsToMap)) {
                     LLVM_DEBUG (
                             dbgs() << "Do decryption for print value: ";
-                            value->dump();
                           );
                     Function* decryptFunction = M.getFunction("decryptStringBeforeLibCall");
                     std::vector<Value*> ArgList;
@@ -2302,7 +2291,6 @@ void EncryptionPass::instrumentExternalFunctionCall(Module &M, std::map<PAGNode*
 			if (isSensitiveArg(value, ptsToMap)) {
 				LLVM_DEBUG (
 				dbgs() << "Do decryption for puts value: ";
-				value->dump();
 				);
 				Function* decryptFunction = M.getFunction("decryptStringBeforeLibCall");
 				std::vector<Value*> ArgList;
@@ -3488,7 +3476,6 @@ void EncryptionPass::instrumentExternalFunctionCall(Module &M, std::map<PAGNode*
 		/*
 		for (int i = 0; i < CInst->getNumArgOperands(); i++) {
 			Value* argVal = CInst->getArgOperand(i);
-			argVal->dump();
 		}
 		*/
 	}
@@ -3985,10 +3972,12 @@ bool EncryptionPass::runOnModule(Module &M) {
             dbgs() << "Collected sensitive annotations\n";
 
 
+            /*
 	for (PAGNode* valNode: SensitiveObjList) {
         assert(valNode->hasValue() && "PAG Node made it so far must have value");
-		valNode->getValue()->dump();
 	}
+
+    */
 	);
 
     // Remove the annotation instruction because it causes a lot of headache later on
