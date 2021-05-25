@@ -3,8 +3,9 @@
 
 1. We need [binutils](https://www.gnu.org/software/binutils/) in order to do LTO for Whole Program Analysis. The instructions to set it up correctly is [here](https://llvm.org/docs/GoldPlugin.html).
 
+2. We also need the custom Glibc from [here](https://github.com/taptipalit/glibc-without-avx-support).
 
-2. Then compile LLVM
+3. Then compile LLVM
 
    1. `cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=<Debug/Release> -DLLVM_TARGETS_TO_BUILD="X86" -DCMAKE_INSTALL_PREFIX=<YOUR_CUSTOM_INSTALL_DIR> -DLLVM_BINUTILS_INCDIR=<BINUTILS_DIR>/include ../`
        
@@ -12,9 +13,9 @@
 
    2. `make -jN` (N = number of cores) 
 
-3. The sample script to run a simple test program is at `data-only-attack-mitigation/test/Datarand/run.sh`. In that script, update the environment variables according to your system. These are `$LLVMSRC`, `$LLVMROOT`, and `$glibc_install`.
+4. The sample script to run a simple test program is at `data-only-attack-mitigation/test/Datarand/run.sh`. In that script, update the environment variables according to your system. These are `$LLVMSRC`, `$LLVMROOT`, and `$glibc_install`.
 
-4. The input to the script is the name of the combined bitcode for the application (without the .bc). So to run the `test.c` program is 
+5. The input to the script is the name of the combined bitcode for the application (without the .bc). So to run the `test.c` program is 
 
    `./run.sh test`
    
